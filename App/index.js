@@ -2,7 +2,7 @@ import React from "react";
 import Navigation from "./config/Navigation";
 import { api } from "./util/api";
 
-api("/latest")
+api("/latest?base=USD")
   .then((response) => {
     console.log("response", response);
   })

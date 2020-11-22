@@ -49,15 +49,6 @@ export const api = (_path = "") => {
 
   const baseCurrency = _path.split("base=")[1];
 
-  return Promise.resolve({
-    base: baseCurrency,
-    date: format(new Date(), "yyyy-MM-dd"),
-    rates: {
-      ...SAMPLE_RATES,
-      [baseCurrency]: 1,
-    },
-  });
-
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({

@@ -1,11 +1,30 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
+import { api } from "./api";
 
 export const ConversionContext = createContext();
 
+const DEFAULT_BASE_CURRENCY = "USD";
+const DEFAULT_QUOTE_CURRENCY = "GBP";
+
 // Provider
 export const ConversionContextProvider = ({ children }) => {
-  const [baseCurrency, setBaseCurrency] = useState("USD");
-  const [quoteCurrency, setQuoteCurrency] = useState("GBP");
+  const [baseCurrency, _setBaseCurrency] = useState(DEFAULT_BASE_CURRENCY);
+  const [quoteCurrency, setQuoteCurrency] = useState(DEFAULT_QUOTE_CURRENCY);
+  const [date, setDate] = useState();
+  const [rates, setRates] = useState({});
+
+  const setBaseCurrency = (currency) => {
+    return api(`/latest?base=${currency}`)
+      .then((response) => {
+        console.log(response);
+        _setBaseCurrency(currency);
+        setDate(response.date);
+        setRates(response.rates);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const swapCurrencies = () => {
     setBaseCurrency(quoteCurrency);
@@ -18,7 +37,13 @@ export const ConversionContextProvider = ({ children }) => {
     swapCurrencies,
     setBaseCurrency,
     setQuoteCurrency,
+    date,
+    rates,
   };
+
+  useEffect(() => {
+    setBaseCurrency(DEFAULT_BASE_CURRENCY);
+  }, []);
 
   return (
     <ConversionContext.Provider value={contextValue}>
