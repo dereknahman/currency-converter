@@ -47,7 +47,7 @@ export const api = (_path = "") => {
     return Promise.reject(new Error("Invalid path"));
   }
 
-  const baseCurrency = _path.split("base=")[1];
+  const baseCurrency = _path.split("base=")[1] || "EUR";
 
   return new Promise((resolve) => {
     setTimeout(() => {
